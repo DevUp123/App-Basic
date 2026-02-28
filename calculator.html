@@ -1,0 +1,74 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Calculator</title>
+<style>
+  body{
+    display:flex;align-items:center;justify-content:center;
+    height:100vh;margin:0;background:#1e1e2f;color:#fff;
+    font-family:Segoe UI,Arial;
+  }
+  .calc{
+    background:#2e2e4d;padding:30px;border-radius:16px;
+    box-shadow:0 12px 24px rgba(0,0,0,0.5);
+  }
+  #display{
+    width:100%;max-width:360px;height:60px;margin-bottom:16px;
+    font-size:32px;text-align:right;padding:8px;border-radius:8px;
+    border:2px solid #444;background:#1e1e2f;color:#fff;
+  }
+  .row{display:flex;}
+  button{
+    flex:1;margin:6px;padding:18px;font-size:22px;
+    border:none;border-radius:8px;
+    background:#4caf50;color:#fff;
+    cursor:pointer;transition:background 0.2s,transform 0.1s;
+    box-shadow:0 4px 8px rgba(0,0,0,0.3);
+  }
+  button:active{transform:scale(0.96);}
+  button:hover{background:#66bb6a;}
+  button.operator{background:#ff9800;}
+  button.operator:hover{background:#fb8c00;}
+  #clear{background:#e53935;}
+  #clear:hover{background:#d32f2f;}
+</style>
+</head>
+<body>
+<div class="calc">
+  <input id="display" readonly />
+  <div class="row">
+    <button data-val="7">7</button><button data-val="8">8</button><button data-val="9">9</button><button class="operator" data-val="/">÷</button>
+  </div>
+  <div class="row">
+    <button data-val="4">4</button><button data-val="5">5</button><button data-val="6">6</button><button class="operator" data-val="*">×</button>
+  </div>
+  <div class="row">
+    <button data-val="1">1</button><button data-val="2">2</button><button data-val="3">3</button><button class="operator" data-val="-">−</button>
+  </div>
+  <div class="row">
+    <button data-val="0">0</button><button data-val=".">.</button><button id="equals" class="operator">=</button><button class="operator" data-val="+">+</button>
+  </div>
+  <div class="row">
+    <button id="clear" style="flex:1;background:#e53935;">C</button>
+  </div>
+</div>
+<script>
+const display=document.getElementById('display');
+let expr='';
+document.querySelectorAll('button').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const val=btn.dataset.val;
+    if(btn.id==='equals'){
+      try{expr=eval(expr).toString();}catch(e){expr='Error';}
+      display.value=expr;
+      return;
+    }
+    if(btn.id==='clear'){expr='';display.value='';return;}
+    expr+=val;
+    display.value=expr;
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,133 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>App Basic</title>
+  <style>
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      font-family: 'Segoe UI',Arial, sans-serif;
+      background: linear-gradient(135deg, #2b2f4c, #4a4e69);
+      color: #fff;
+    }
+    #container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 20px;
+      width: 80%;
+      max-width: 800px;
+    }
+    .box {
+      background: #4caf50;
+      height: 150px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      user-select: none;
+      border-radius: 12px;
+      box-shadow: 0 6px 10px rgba(0,0,0,.3);
+      transition: transform 0.2s, background 0.2s;
+    }
+    .box:hover {
+      transform: translateY(-4px);
+      background: #66bb6a;
+    }
+    #home-screen, #auth-screen {
+      position: fixed;
+      top:0; left:0; right:0; bottom:0;
+      display:flex; align-items:center; justify-content:center;
+      background: rgba(0,0,0,0.6);
+      z-index:10;
+    }
+    #home-screen .home-card {
+      background:#fff; color:#333; padding:24px 32px; border-radius:12px;
+      box-shadow:0 8px 16px rgba(0,0,0,0.3); width:320px; text-align:center;
+      font-family: 'Segoe UI',Arial, sans-serif;
+    }
+    #home-screen .home-card h1{margin-top:0;}
+    #home-screen .home-card button {padding:10px 16px; border:none;border-radius:6px;background:#4caf50;color:#fff;font-size:16px;cursor:pointer;}
+    #home-screen .home-card button:hover{background:#66bb6a;}
+    .auth-card {
+      background:#fff; color:#333; padding:24px 32px; border-radius:12px;
+      box-shadow:0 8px 16px rgba(0,0,0,0.3); width:320px; text-align:center;
+      font-family: 'Segoe UI',Arial, sans-serif;
+    }
+    .auth-card h2 {margin-top:0;}
+    .auth-card input {width:100%;padding:8px;margin:8px 0;border:1px solid #ccc;border-radius:6px;}
+    .auth-card button {width:100%;padding:10px;margin-top:8px;border:none;border-radius:6px;background:#4caf50;color:#fff;font-size:16px;cursor:pointer;}
+    .auth-card button:hover{background:#66bb6a;}
+    .auth-card #toggle-text{font-size:14px;margin-top:12px;color:#666;}
+    .auth-card #toggle-text a{color:#4caf50;text-decoration:none;}
+    .auth-card #toggle-text a:hover{color:#388e3c;}
+    #auth-msg{display:block;margin-top:12px;color:#d32f2f;}
+    #main-header{display:flex;justify-content:space-between;align-items:center;padding:10px 20px;background:rgba(255,255,255,0.1);border-bottom:1px solid rgba(255,255,255,0.2);}
+    #welcome-user{margin-right:20px;font-size:16px;}
+    #header-actions button{margin-left:8px;}
+    #btn-logout{padding:6px 12px;border:2px solid #777;border-radius:20px;background:transparent;color:#777;font-weight:600;cursor:pointer;transition:background 0.2s,color 0.2s;}
+    #btn-logout:hover{background:#777;color:#fff;}
+    #btn-delete{padding:6px 12px;border:2px solid #e53935;border-radius:20px;background:transparent;color:#e53935;font-weight:600;cursor:pointer;transition:background 0.2s,color 0.2s;border-radius:20px;}
+    #btn-delete:hover{background:#e53935;color:#fff;}
+    #btn-edit{padding:6px 12px;border:2px solid #2196f3;border-radius:20px;background:transparent;color:#2196f3;font-weight:600;cursor:pointer;transition:background 0.2s,color 0.2s;}
+    #btn-edit:hover{background:#2196f3;color:#fff;}
+    #edit-modal {position: fixed;top:0;left:0;right:0;bottom:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.6);z-index:20;}
+    #edit-modal .auth-card {width:320px;}
+    #edit-modal input {width:100%;margin:6px 0;}
+    #edit-modal #btn-cancel{margin-left:8px;background:#aaa;color:#fff;}
+    #edit-msg{display:block;margin-top:8px;color:#d32f2f;}
+  </style>
+</head>
+<body>
+  <div id="home-screen">
+    <div class="home-card">
+      <h1>Welcome!</h1>
+      <p>Click below to sign in or register.</p>
+      <button id="btn-go-signin">Sign In / Register</button>
+    </div>
+  </div>
+  <div id="auth-screen" style="display:none;">
+    <div class="auth-card">
+      <h2 id="auth-title">Sign In</h2>
+      <input id="username" placeholder="Username" />
+      <input id="password" type="password" placeholder="Password" />
+      <button id="btn-submit">Sign In</button>
+      <p id="toggle-text">Don't have an account? <a href="#" id="toggle-link">Register</a></p>
+      <span id="auth-msg"></span>
+    </div>
+  </div>
+  <div id="main-screen" style="display:none;">
+    <div id="main-header">
+      <img id="user-icon" src="" alt="" width="32" height="32" style="border-radius:50%;margin-right:10px;display:none;">
+      <span id="welcome-user"></span>
+      <div id="header-actions">
+        <button id="btn-edit">Edit Account</button>
+        <button id="btn-logout">Logout</button>
+        <button id="btn-delete">Delete Account</button>
+      </div>
+    </div>
+    <div id="container">
+      <div class="box">Site 1</div>
+      <div class="box">Site 2</div>
+      <div class="box">Site 3</div>
+      <div class="box">Site 4</div>
+      <div class="box">Safe Search</div>
+    </div>
+  </div>
+  <!-- edit modal -->
+  <div id="edit-modal" style="display:none;">
+    <div class="auth-card">
+      <h2>Edit Account</h2>
+      <input id="edit-name" placeholder="Display Name" />
+      <label>Icon: <input id="edit-icon" type="file" accept="image/*" /></label>
+      <button id="btn-save">Save</button>
+      <button id="btn-cancel">Cancel</button>
+      <span id="edit-msg"></span>
+    </div>
+  </div>
+  <script src="random.js"></script>
+</body>
+</html>

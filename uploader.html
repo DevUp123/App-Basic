@@ -1,0 +1,77 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Image Uploader</title>
+  <style>
+    body{display:flex;flex-direction:column;align-items:center;padding:40px;margin:0;font-family:Segoe UI,Arial;background:#f0f0f0;}
+    h1{margin-bottom:20px;color:#333;}
+    #uploader{background:#fff;padding:20px;border-radius:10px;box-shadow:0 4px 8px rgba(0,0,0,0.1);width:90%;max-width:600px;text-align:center;}
+    input[type=file]{margin:12px 0;}
+    #preview{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px;justify-content:center;}
+    #preview img{max-width:120px;border-radius:6px;box-shadow:0 2px 4px rgba(0,0,0,0.2);}
+    #logout{position:absolute;top:16px;right:16px;padding:8px 12px;background:#e53935;color:#fff;border:none;border-radius:6px;cursor:pointer;}
+  </style>
+</head>
+<body>
+  <button id="logout">Logout</button>
+  <h1>Image Uploader</h1>
+  <div id="uploader">
+    <input id="fileInput" type="file" accept="image/*" multiple />
+    <button id="btnUpload">Upload</button>
+    <div id="message"></div>
+    <div id="preview"></div>
+  </div>
+  <script>
+    const currentUser = localStorage.getItem('AppBasicCurrentUser');
+    if(!currentUser){
+      alert('You must be signed in');
+      location.href='random.html';
+    }
+
+    const users = JSON.parse(localStorage.getItem('AppBasicUsers')||'{}');
+    if(!users[currentUser]){
+      alert('user data missing');
+      location.href='random.html';
+    }
+    if(!users[currentUser].images) users[currentUser].images=[];
+
+    const preview = document.getElementById('preview');
+    function refreshPreview(){
+      preview.innerHTML = '';
+      users[currentUser].images.forEach(src=>{
+        const img=document.createElement('img'); img.src=src;
+        preview.appendChild(img);
+      });
+    }
+    refreshPreview();
+
+    document.getElementById('btnUpload').onclick=()=>{
+      const files=document.getElementById('fileInput').files;
+      if(!files.length)return;
+      const reader=new FileReader();
+      let idx=0;
+      function next(){
+        if(idx>=files.length){
+          localStorage.setItem('AppBasicUsers',JSON.stringify(users));
+          refreshPreview();
+          document.getElementById('message').textContent='Upload complete';
+          return;
+        }
+        reader.onload=e=>{
+          users[currentUser].images.push(e.target.result);
+          idx++;
+          next();
+        };
+        reader.readAsDataURL(files[idx]);
+      }
+      next();
+    };
+
+    document.getElementById('logout').onclick=()=>{
+      localStorage.removeItem('currentUser');
+      location.href='random.html';
+    };
+  </script>
+</body>
+</html>
